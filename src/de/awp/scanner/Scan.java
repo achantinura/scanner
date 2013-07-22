@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import de.awp.scanner.util.SystemUiHider;
 
+import android.R.id;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -35,6 +36,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -53,6 +56,10 @@ public class Scan extends Activity {
     private TextView mText;
     private int mCount = 0;
     String rfidid;
+    TextView textRfidid;
+    EditText textServer;
+    TextView textError;
+    ProgressBar progress;
 	
 	/**
      * Whether or not the system UI should be auto-hidden after
@@ -89,6 +96,10 @@ public class Scan extends Activity {
         setContentView(R.layout.activity_scan);
         
         Button button = (Button)findViewById(R.id.dummy_button);
+        textRfidid = (TextView)findViewById(R.id.idText);
+        textServer = (EditText)findViewById(R.id.inputServer);
+        textError = (TextView)findViewById(R.id.textError);
+        progress = (ProgressBar)findViewById(R.id.progressBar1);
         
         button.setOnClickListener(new View.OnClickListener() {
 			
@@ -291,11 +302,12 @@ public class Scan extends Activity {
         	System.out.println(string);
         }
         rfidid = ByteArrayToHexString(tagFromIntent.getId());
+        textRfidid.setText(rfidid);
         Thread thread = new Thread(new Runnable(){
 		    @Override
 		    public void run() {
 		    	try {
-					URL url = new URL("http://192.168.1.155:8080/planspielBPMN/rest/create");
+		    		URL url = new URL("http://192.168.1.155:8080/planspielBPMN/rest/create");
 					HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 					connection.setDoOutput(true);
 					connection.setRequestMethod("POST");
@@ -310,17 +322,20 @@ public class Scan extends Activity {
 					System.out.println(connection.getResponseCode());
 					System.out.println("ended");
 					connection.disconnect();
+					
 				} catch(MalformedURLException mE) {
-					mE.printStackTrace();
+					System.out.println("fehler url");
+						
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("fehler netzwerk");
+					
 				}
 		    }
 		});
 
 		thread.start();
-        
+		progress.setVisibility(View.INVISIBLE);
         //do something with tagFromIntent
         
     }
@@ -346,6 +361,7 @@ public class Scan extends Activity {
     public void onPause() {
         super.onPause();
         if (mAdapter != null) mAdapter.disableForegroundDispatch(this);
+        progress.setVisibility(View.VISIBLE);
         System.out.println("in onPause");
     }
 

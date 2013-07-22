@@ -28,7 +28,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int dummy_button=0x7f080002;
         public static final int fullscreen_content=0x7f080000;
         public static final int fullscreen_content_controls=0x7f080001;
-        public static final int idText=0x7f080003;
+        public static final int idText=0x7f080005;
+        public static final int inputServer=0x7f080008;
+        public static final int lblidText=0x7f080004;
+        public static final int progressBar1=0x7f08000b;
+        public static final int tableRow1=0x7f080003;
+        public static final int tableRow2=0x7f080006;
+        public static final int tableRow3=0x7f080009;
+        public static final int tableRow4=0x7f08000a;
+        public static final int textError=0x7f08000c;
+        public static final int textView1=0x7f080007;
     }
     public static final class layout {
         public static final int activity_scan=0x7f030000;
